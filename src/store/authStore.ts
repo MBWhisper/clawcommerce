@@ -24,7 +24,11 @@ interface AuthState {
   // Auth methods
   initialize: () => Promise<void>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
-  signUp: (email: string, password: string, fullName: string) => Promise<{ error: Error | null }>;
+  signUp: (
+    email: string,
+    password: string,
+    fullName: string
+  ) => Promise<{ error: Error | null; needsEmailConfirmation?: boolean }>;
   signOut: () => Promise<void>;
   fetchUserData: () => Promise<void>;
 }
@@ -56,6 +60,15 @@ export const useAuthStore = create<AuthState>()(
           if (session?.user) {
             set({ user: session.user, session });
             await get().fetchUserData();
+          } else {
+            // Clear any stale persisted auth state when no valid session exists
+            set({
+              user: null,
+              session: null,
+              profile: null,
+              store: null,
+              subscription: null,
+            });
           }
           
           // Listen for auth changes
@@ -112,11 +125,18 @@ export const useAuthStore = create<AuthState>()(
           
           if (error) throw error;
           
-          if (data.user) {
+          if (data.user && data.session) {
             set({ user: data.user, session: data.session });
+          } else {
+            // If email confirmation is enabled, Supabase may return user without session.
+            // Keep auth state clean until the user confirms and signs in.
+            set({ user: null, session: null });
           }
           
-          return { error: null };
+          return {
+            error: null,
+            needsEmailConfirmation: !data.session,
+          };
         } catch (error) {
           return { error: error as Error };
         } finally {

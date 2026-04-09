@@ -57,10 +57,10 @@ export default function Navbar() {
 
           {/* CTA Buttons */}
           <div className="hidden lg:flex items-center gap-4">
-            <a href="#" className="text-gray-700 hover:text-orange-500 transition-colors font-semibold">
+            <a href="/login" className="text-gray-700 hover:text-orange-500 transition-colors font-semibold">
               تسجيل الدخول
             </a>
-            <a href="#" className="btn-primary text-sm py-2.5 px-5">
+            <a href="/register" className="btn-primary text-sm py-2.5 px-5">
               ابدأ مجاناً
             </a>
           </div>
@@ -99,10 +99,10 @@ export default function Navbar() {
             ))}
           </div>
           <div className="mt-6 pt-6 border-t border-gray-100 space-y-3">
-            <a href="#" className="block w-full py-3 text-center text-gray-700 hover:text-orange-600 font-semibold">
+            <a href="/login" className="block w-full py-3 text-center text-gray-700 hover:text-orange-600 font-semibold">
               تسجيل الدخول
             </a>
-            <a href="#" className="btn-primary block text-center">
+            <a href="/register" className="btn-primary block text-center">
               ابدأ مجاناً
             </a>
           </div>

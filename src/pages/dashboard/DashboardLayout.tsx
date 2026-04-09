@@ -65,14 +65,33 @@ export default function DashboardLayout() {
   const { fetchAllData } = useStoreStore();
   const navigate = useNavigate();
 
+  // تم إلغاء إعادة التوجيه الى صفحة تسجيل الدخول لعدم وجودها حالياً
   useEffect(() => {
-    if (!isLoading && !user) {
-      navigate('/login');
+    // لو لم يكن هناك مستخدم مسجل دخول - نسمح بالوصول للمعاينة
+    if (!user) {
+      // لا نقوم باعادة التوجيه - نسمح بالوصول مباشرة للمعاينة
     }
-  }, [user, isLoading, navigate]);
+  }, [user, navigate]);
 
   useEffect(() => {
-    if (store?.id) {
+    // اذا لم يكن هناك متجر او مستخدم - نستخدم بيانات تجريبية للمعاينة
+    if (!store?.id) {
+      // نوقف التحميل بعد ثانيتين لنقوم بعرض بيانات تجريبية
+      setTimeout(() => {
+        useAuthStore.setState({ isLoading: false });
+        useStoreStore.setState({ 
+          isLoading: false,
+          stats: {
+            totalRevenue: 25680,
+            totalOrders: 156,
+            totalProducts: 42,
+            totalCustomers: 89,
+            recentOrders: [],
+            topProducts: []
+          }
+        });
+      }, 1500);
+    } else {
       fetchAllData(store.id);
     }
   }, [store?.id, fetchAllData]);

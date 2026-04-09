@@ -8,6 +8,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { signUp } = useAuthStore();
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
 
     if (password !== confirmPassword) {
       setError('كلمتا المرور غير متطابقتين');
@@ -28,13 +30,18 @@ export default function RegisterPage() {
 
     setIsLoading(true);
 
-    const { error } = await signUp(email, password, fullName);
+    const { error, needsEmailConfirmation } = await signUp(email, password, fullName);
 
     if (error) {
       setError(error.message || 'فشل إنشاء الحساب');
       setIsLoading(false);
     } else {
-      navigate('/dashboard');
+      if (needsEmailConfirmation) {
+        setSuccess('تم إنشاء الحساب بنجاح. يرجى تأكيد بريدك الإلكتروني ثم تسجيل الدخول.');
+        setIsLoading(false);
+      } else {
+        navigate('/dashboard');
+      }
     }
   };
 
@@ -61,6 +68,12 @@ export default function RegisterPage() {
           {error && (
             <div className="bg-red-50 text-red-600 p-4 rounded-xl mb-6 text-sm">
               {error}
+            </div>
+          )}
+
+          {success && (
+            <div className="bg-green-50 text-green-700 p-4 rounded-xl mb-6 text-sm">
+              {success}
             </div>
           )}
 
