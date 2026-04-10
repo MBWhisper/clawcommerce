@@ -114,10 +114,35 @@ export const useAuthStore = create<AuthState>()(
           
           if (data.user) {
             set({ user: data.user, session: data.session });
+            
+            // Wait a moment for the trigger to create the profile
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            // Create a default store for the user
+            try {
+              const { error: storeError } = await supabase
+                .from('stores')
+                .insert({
+                  user_id: data.user.id,
+                  name: `${fullName}'s Store`,
+                  slug: `${email.split('@')[0]}-${Date.now()}`,
+                  description: '',
+                  logo_url: null,
+                  banner_url: null,
+                  is_active: true,
+                });
+              
+              if (storeError) {
+                console.warn('[v0] Store creation warning:', storeError.message);
+              }
+            } catch (storeError) {
+              console.warn('[v0] Could not create default store:', storeError);
+            }
           }
           
           return { error: null };
         } catch (error) {
+          console.error('[v0] Sign up error:', error);
           return { error: error as Error };
         } finally {
           set({ isLoading: false });
@@ -141,34 +166,38 @@ export const useAuthStore = create<AuthState>()(
         
         try {
           // Fetch profile
-          const { data: profile } = await supabase
+          const { data: profile, error: profileError } = await supabase
             .from('profiles')
             .select('*')
             .eq('id', user.id)
             .single();
           
-          if (profile) set({ profile });
+          if (profile) {
+            set({ profile });
+          } else if (profileError && profileError.code !== 'PGRST116') {
+            console.warn('[v0] Profile fetch error:', profileError.message);
+          }
           
-          // Fetch store
-          const { data: store } = await supabase
+          // Fetch store (might not exist yet)
+          const { data: store, error: storeError } = await supabase
             .from('stores')
             .select('*')
             .eq('user_id', user.id)
-            .single();
+            .maybeSingle();
           
           if (store) set({ store });
           
-          // Fetch subscription
-          const { data: subscription } = await supabase
+          // Fetch subscription (might not exist)
+          const { data: subscription, error: subscriptionError } = await supabase
             .from('subscriptions')
             .select('*')
             .eq('user_id', user.id)
-            .single();
+            .maybeSingle();
           
           if (subscription) set({ subscription });
           
         } catch (error) {
-          console.error('Error fetching user data:', error);
+          console.error('[v0] Error fetching user data:', error);
         }
       },
     }),

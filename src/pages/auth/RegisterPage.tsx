@@ -31,10 +31,28 @@ export default function RegisterPage() {
     const { error } = await signUp(email, password, fullName);
 
     if (error) {
-      setError(error.message || 'فشل إنشاء الحساب');
+      // Map Supabase error messages to user-friendly Arabic messages
+      let userMessage = 'فشل إنشاء الحساب';
+      
+      if (error.message.includes('User already registered')) {
+        userMessage = 'هذا البريد الإلكتروني مسجل بالفعل';
+      } else if (error.message.includes('Invalid email')) {
+        userMessage = 'البريد الإلكتروني غير صحيح';
+      } else if (error.message.includes('Password')) {
+        userMessage = 'كلمة المرور ضعيفة جداً';
+      } else if (error.message.includes('database')) {
+        userMessage = 'حدث خطأ في قاعدة البيانات. يرجى المحاولة مجدداً';
+      }
+      
+      setError(userMessage);
       setIsLoading(false);
     } else {
-      navigate('/dashboard');
+      // Show success message
+      setError('');
+      // Navigate after a short delay to let user see the loading state
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 500);
     }
   };
 
