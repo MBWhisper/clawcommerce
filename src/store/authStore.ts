@@ -107,10 +107,14 @@ export const useAuthStore = create<AuthState>()(
             password,
             options: {
               data: { full_name: fullName },
+              emailRedirectTo: `${window.location.origin}/dashboard`,
             },
           });
           
-          if (error) throw error;
+          if (error) {
+            console.error('[v0] Auth signup error:', error.message);
+            throw error;
+          }
           
           if (data.user) {
             set({ user: data.user, session: data.session });

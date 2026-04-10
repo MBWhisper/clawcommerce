@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
+import { handleEmailError } from '../../lib/emailErrors';
 
 export default function RegisterPage() {
   const [fullName, setFullName] = useState('');
@@ -31,20 +32,13 @@ export default function RegisterPage() {
     const { error } = await signUp(email, password, fullName);
 
     if (error) {
-      // Map Supabase error messages to user-friendly Arabic messages
-      let userMessage = 'فشل إنشاء الحساب';
-      
-      if (error.message.includes('User already registered')) {
-        userMessage = 'هذا البريد الإلكتروني مسجل بالفعل';
-      } else if (error.message.includes('Invalid email')) {
-        userMessage = 'البريد الإلكتروني غير صحيح';
-      } else if (error.message.includes('Password')) {
-        userMessage = 'كلمة المرور ضعيفة جداً';
-      } else if (error.message.includes('database')) {
-        userMessage = 'حدث خطأ في قاعدة البيانات. يرجى المحاولة مجدداً';
-      }
-      
-      setError(userMessage);
+      const errorInfo = handleEmailError(error);
+      console.log('[v0] Registration error:', {
+        userMessage: errorInfo.userMessage,
+        technical: errorInfo.technicalMessage,
+        code: errorInfo.code,
+      });
+      setError(errorInfo.userMessage);
       setIsLoading(false);
     } else {
       // Show success message
