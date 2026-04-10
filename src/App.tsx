@@ -24,6 +24,7 @@ import Footer from './components/Footer';
 // Auth pages
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
+import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
 
 // Dashboard pages
 import DashboardLayout from './pages/dashboard/DashboardLayout';
@@ -74,6 +75,7 @@ export default function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         
         {/* Dashboard routes */}
         <Route path="/dashboard" element={<DashboardLayout />}>
