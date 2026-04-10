@@ -21,7 +21,10 @@ export default function LoginPage() {
       setError(error.message || 'فشل تسجيل الدخول');
       setIsLoading(false);
     } else {
-      navigate('/dashboard');
+      // Navigate after a short delay to let the auth state update
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 300);
     }
   };
 

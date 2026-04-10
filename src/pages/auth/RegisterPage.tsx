@@ -17,13 +17,36 @@ export default function RegisterPage() {
     e.preventDefault();
     setError('');
 
-    if (password !== confirmPassword) {
-      setError('كلمتا المرور غير متطابقتين');
+    // Validate inputs
+    if (!fullName.trim()) {
+      setError('الرجاء إدخال الاسم الكامل');
+      return;
+    }
+
+    if (!email.trim()) {
+      setError('الرجاء إدخال البريد الإلكتروني');
+      return;
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError('البريد الإلكتروني غير صحيح');
+      return;
+    }
+
+    if (!password) {
+      setError('الرجاء إدخال كلمة المرور');
       return;
     }
 
     if (password.length < 6) {
       setError('كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError('كلمتا المرور غير متطابقتين');
       return;
     }
 
