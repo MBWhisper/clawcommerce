@@ -51,6 +51,16 @@ interface StoreState {
   createCategory: (category: Partial<Category>) => Promise<{ data: Category | null; error: Error | null }>;
   updateCategory: (id: string, updates: Partial<Category>) => Promise<{ error: Error | null }>;
   deleteCategory: (id: string) => Promise<{ error: Error | null }>;
+
+  // Customer CRUD
+  createCustomer: (customer: Partial<Customer>) => Promise<{ data: Customer | null; error: Error | null }>;
+  updateCustomer: (id: string, updates: Partial<Customer>) => Promise<{ error: Error | null }>;
+  deleteCustomer: (id: string) => Promise<{ error: Error | null }>;
+
+  // Coupon CRUD
+  createCoupon: (coupon: Partial<Coupon>) => Promise<{ data: Coupon | null; error: Error | null }>;
+  updateCoupon: (id: string, updates: Partial<Coupon>) => Promise<{ error: Error | null }>;
+  deleteCoupon: (id: string) => Promise<{ error: Error | null }>;
 }
 
 export const useStoreStore = create<StoreState>()((set, get) => ({
@@ -322,6 +332,125 @@ export const useStoreStore = create<StoreState>()((set, get) => ({
       if (error) throw error;
       
       set({ categories: get().categories.filter(c => c.id !== id) });
+      return { error: null };
+    } catch (error) {
+      return { error: error as Error };
+    }
+  },
+
+  // Customer CRUD
+  createCustomer: async (customer) => {
+    try {
+      const { data, error } = await supabase
+        .from('customers')
+        .insert({
+          ...customer,
+          total_orders: 0,
+          total_spent: 0,
+        } as Record<string, unknown>)
+        .select()
+        .single();
+      
+      if (error) throw error;
+      
+      const newCustomer = data as Customer;
+      set({ customers: [newCustomer, ...get().customers] });
+      return { data: newCustomer, error: null };
+    } catch (error) {
+      return { data: null, error: error as Error };
+    }
+  },
+
+  updateCustomer: async (id, updates) => {
+    try {
+      const { error } = await supabase
+        .from('customers')
+        .update(updates as Record<string, unknown>)
+        .eq('id', id);
+      
+      if (error) throw error;
+      
+      set({
+        customers: get().customers.map(c =>
+          c.id === id ? { ...c, ...updates } as Customer : c
+        ),
+      });
+      
+      return { error: null };
+    } catch (error) {
+      return { error: error as Error };
+    }
+  },
+
+  deleteCustomer: async (id) => {
+    try {
+      const { error } = await supabase
+        .from('customers')
+        .delete()
+        .eq('id', id);
+      
+      if (error) throw error;
+      
+      set({ customers: get().customers.filter(c => c.id !== id) });
+      return { error: null };
+    } catch (error) {
+      return { error: error as Error };
+    }
+  },
+
+  // Coupon CRUD
+  createCoupon: async (coupon) => {
+    try {
+      const { data, error } = await supabase
+        .from('coupons')
+        .insert({
+          ...coupon,
+          used_count: 0,
+        } as Record<string, unknown>)
+        .select()
+        .single();
+      
+      if (error) throw error;
+      
+      const newCoupon = data as Coupon;
+      set({ coupons: [newCoupon, ...get().coupons] });
+      return { data: newCoupon, error: null };
+    } catch (error) {
+      return { data: null, error: error as Error };
+    }
+  },
+
+  updateCoupon: async (id, updates) => {
+    try {
+      const { error } = await supabase
+        .from('coupons')
+        .update(updates as Record<string, unknown>)
+        .eq('id', id);
+      
+      if (error) throw error;
+      
+      set({
+        coupons: get().coupons.map(c =>
+          c.id === id ? { ...c, ...updates } as Coupon : c
+        ),
+      });
+      
+      return { error: null };
+    } catch (error) {
+      return { error: error as Error };
+    }
+  },
+
+  deleteCoupon: async (id) => {
+    try {
+      const { error } = await supabase
+        .from('coupons')
+        .delete()
+        .eq('id', id);
+      
+      if (error) throw error;
+      
+      set({ coupons: get().coupons.filter(c => c.id !== id) });
       return { error: null };
     } catch (error) {
       return { error: error as Error };
