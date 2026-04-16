@@ -14,6 +14,7 @@ export default function Pricing() {
       features: ['حتى 100 منتج', 'بوابتين للدفع', '2 شركات شحن', 'شهادة SSL مجانية', 'دعم عبر البريد', 'تقارير أساسية'],
       notIncluded: ['تكامل واتساب', 'تطبيق جوال', 'دعم 24/7'],
       cta: 'ابدأ مجاناً 14 يوم',
+      ctaLink: '/register',
     },
     {
       name: 'الاحترافي',
@@ -24,7 +25,8 @@ export default function Pricing() {
       popular: true,
       features: ['منتجات غير محدودة', 'جميع بوابات الدفع', 'جميع شركات الشحن', 'تكامل واتساب', 'دعم 24/7', 'تقارير متقدمة', 'كوبونات وخصومات', 'تطبيق جوال'],
       notIncluded: [],
-      cta: 'جرب مجاناً 14 يوم',
+      cta: 'اشترك الآن',
+      ctaLink: 'https://buy.stripe.com/test_eVq00l9Uhh2O8APdUOfMA01',
     },
     {
       name: 'المؤسسي',
@@ -36,6 +38,7 @@ export default function Pricing() {
       features: ['كل مميزات الاحترافي', 'مدير حساب مخصص', 'API متقدم', 'تقارير مخصصة', 'SLA مضمون', 'تدريب الفريق', 'نطاقات متعددة', 'أولوية في الدعم'],
       notIncluded: [],
       cta: 'تواصل معنا',
+      ctaLink: '#contact',
     },
   ];
 
@@ -104,7 +107,12 @@ export default function Pricing() {
                 )}
               </div>
 
-              <a href="/register" className={`block w-full py-4 rounded-full font-bold transition-all text-center mb-8 ${plan.popular ? 'bg-white text-orange-600 hover:bg-gray-100' : 'bg-gradient-to-r from-orange-500 to-red-600 text-white hover:shadow-lg hover:shadow-orange-500/30 hover:-translate-y-0.5'}`}>
+              <a
+                href={plan.ctaLink}
+                target={plan.ctaLink.startsWith('http') ? '_blank' : '_self'}
+                rel="noopener noreferrer"
+                className={`block w-full py-4 rounded-full font-bold transition-all text-center mb-8 ${plan.popular ? 'bg-white text-orange-600 hover:bg-gray-100' : 'bg-gradient-to-r from-orange-500 to-red-600 text-white hover:shadow-lg hover:shadow-orange-500/30 hover:-translate-y-0.5'}`}
+              >
                 {plan.cta}
               </a>
 
