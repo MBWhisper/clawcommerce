@@ -1,16 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "vite",
-  "functions": {
-    "api/stripe-webhook.ts": {
-      "runtime": "edge"
-    }
-  },
   "rewrites": [
-    {
-      "source": "/api/stripe-webhook",
-      "destination": "/api/stripe-webhook.ts"
-    },
     {
       "source": "/(.*)",
       "destination": "/index.html"
