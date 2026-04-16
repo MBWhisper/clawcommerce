@@ -29,6 +29,11 @@ import DashboardLayout from "./pages/dashboard/DashboardLayout";
 import DashboardHome from "./pages/dashboard/DashboardHome";
 import ProductsPage from "./pages/dashboard/ProductsPage";
 import OrdersPage from "./pages/dashboard/OrdersPage";
+import CustomersPage from "./pages/dashboard/CustomersPage";
+import CategoriesPage from "./pages/dashboard/CategoriesPage";
+import CouponsPage from "./pages/dashboard/CouponsPage";
+import AnalyticsPage from "./pages/dashboard/AnalyticsPage";
+import SettingsPage from "./pages/dashboard/SettingsPage";
 
 export default function App() {
   const [authOpen, setAuthOpen] = useState(false);
@@ -72,11 +77,11 @@ export default function App() {
             <Route index element={<DashboardHome />} />
             <Route path="products" element={<ProductsPage />} />
             <Route path="orders" element={<OrdersPage />} />
-            <Route path="customers" element={<div className="text-center py-20"><h2 className="text-2xl font-bold mb-4">قسم العملاء</h2><p className="text-gray-500">قادم قريباً...</p></div>} />
-            <Route path="categories" element={<div className="text-center py-20"><h2 className="text-2xl font-bold mb-4">قسم التصنيفات</h2><p className="text-gray-500">قادم قريباً...</p></div>} />
-            <Route path="coupons" element={<div className="text-center py-20"><h2 className="text-2xl font-bold mb-4">قسم الكوبونات</h2><p className="text-gray-500">قادم قريباً...</p></div>} />
-            <Route path="analytics" element={<div className="text-center py-20"><h2 className="text-2xl font-bold mb-4">قسم التحليلات</h2><p className="text-gray-500">قادم قريباً...</p></div>} />
-            <Route path="settings" element={<div className="text-center py-20"><h2 className="text-2xl font-bold mb-4">قسم الإعدادات</h2><p className="text-gray-500">قادم قريباً...</p></div>} />
+            <Route path="customers" element={<CustomersPage />} />
+            <Route path="categories" element={<CategoriesPage />} />
+            <Route path="coupons" element={<CouponsPage />} />
+            <Route path="analytics" element={<AnalyticsPage />} />
+            <Route path="settings" element={<SettingsPage />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/login" replace />} />
