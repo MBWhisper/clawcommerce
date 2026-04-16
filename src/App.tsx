@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { Analytics } from "@vercel/analytics/react";
+import { useAuthStore } from "./store/authStore";
 
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
@@ -37,6 +38,11 @@ import SettingsPage from "./pages/dashboard/SettingsPage";
 
 export default function App() {
   const [authOpen, setAuthOpen] = useState(false);
+  const initialize = useAuthStore((state) => state.initialize);
+
+  useEffect(() => {
+    initialize();
+  }, [initialize]);
 
   return (
     <ErrorBoundary>
