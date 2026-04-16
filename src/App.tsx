@@ -20,7 +20,7 @@ import Contact from "./components/Contact";
 import CTA from "./components/CTA";
 import Footer from "./components/Footer";
 import { AuthModal } from "./components/AuthModal";
-
+import { ErrorBoundary } from "./components/ErrorBoundary";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
@@ -39,7 +39,7 @@ export default function App() {
   const [authOpen, setAuthOpen] = useState(false);
 
   return (
-    <>
+    <ErrorBoundary>
       <Router>
         <Routes>
           <Route
@@ -87,8 +87,7 @@ export default function App() {
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </Router>
-
       <Analytics />
-    </>
+    </ErrorBoundary>
   );
 }
