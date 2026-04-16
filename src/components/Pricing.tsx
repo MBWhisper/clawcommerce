@@ -26,7 +26,7 @@ export default function Pricing() {
       features: ['منتجات غير محدودة', 'جميع بوابات الدفع', 'جميع شركات الشحن', 'تكامل واتساب', 'دعم 24/7', 'تقارير متقدمة', 'كوبونات وخصومات', 'تطبيق جوال'],
       notIncluded: [],
       cta: 'اشترك الآن',
-      ctaLink: 'https://buy.stripe.com/test_eVq00l9Uhh2O8APdUOfMA01',
+      ctaLink: 'https://clawcommerce.lemonsqueezy.com/checkout/buy/8ba4933e-9590-4965-be41-e3d7e126bc6f',
     },
     {
       name: 'المؤسسي',
